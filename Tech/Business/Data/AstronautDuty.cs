@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StargateAPI.Business.Data
 {
     [Table("AstronautDuty")]
+    [ExcludeFromCodeCoverage]
     public class AstronautDuty
     {
         public int Id { get; set; }
@@ -21,7 +23,7 @@ namespace StargateAPI.Business.Data
 
         public virtual Person Person { get; set; }
     }
-
+    [ExcludeFromCodeCoverage]
     public class AstronautDutyConfiguration : IEntityTypeConfiguration<AstronautDuty>
     {
         public void Configure(EntityTypeBuilder<AstronautDuty> builder)

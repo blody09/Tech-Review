@@ -26,7 +26,6 @@ namespace StargateAPI.Controllers
             try
             {
                 var result = await _mediator.Send(new GetLogs(){ });
-
                 return this.GetResponse(result);
             }
             catch (Exception ex)

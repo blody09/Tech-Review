@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StargateAPI.Business.Data
 {
     [Table("Person")]
+    [ExcludeFromCodeCoverage]
     public class Person
     {
         public int Id { get; set; }
@@ -19,6 +21,7 @@ namespace StargateAPI.Business.Data
 
     }
 
+    [ExcludeFromCodeCoverage]
     public class PersonConfiguration : IEntityTypeConfiguration<Person>
     {
         public void Configure(EntityTypeBuilder<Person> builder)

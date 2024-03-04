@@ -4,9 +4,11 @@ using MediatR.Pipeline;
 using Microsoft.EntityFrameworkCore;
 using StargateAPI.Business.Data;
 using StargateAPI.Controllers;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StargateAPI.Business.Commands
 {
+    [ExcludeFromCodeCoverage]
     public class CreatePerson : IRequest<CreatePersonResult>
     {
         public required string Name { get; set; } = string.Empty;
@@ -25,14 +27,17 @@ namespace StargateAPI.Business.Commands
 
             if (person != null)
             {
-                //var logEntry = new CreateLogEntry
-                //{
-                //    LogType = "Failure",
-                //    Message = $"Duplicate person,{request.Name},already exists in our records."
+                var logging = new Logging()
+                {
+                    LogType = "BadRequest",
+                    Message = $" duplicate Person, {person}, Already exists in our records.",
+                    LogException = string.Empty,
+                    TimeStamp = DateTime.Now,
+                };
+                
+                _context.Logs.Add(logging);
+                _context.SaveChangesAsync();
 
-                //};
-                //var logHandler = new CreateLogEntry();
-                //var result = logHandler;
                 throw new BadHttpRequestException("Bad Request");
             }
             return Task.CompletedTask;
@@ -61,31 +66,35 @@ namespace StargateAPI.Business.Commands
 
                 await _context.SaveChangesAsync();
 
-                //var logEntry = new CreateLogEntry
-                //{
-                //    LogType = "Success",
-                //    Message = $"New Person,{newPerson}, added to the roster,."
+                var logging = new Logging()
+                {
+                    LogType = "Successs",
+                    Message = $"New Person,{newPerson}, added to the roster. ",
+                    LogException = string.Empty,
+                    TimeStamp = DateTime.Now,
+                };
 
-                //};
-                //var logHandler = new CreateLogEntry();
-                //var result = logHandler;
-
+                _context.Logs.Add(logging);
+                _context.SaveChangesAsync();
+                
                 return new CreatePersonResult()
                 {
                     Id = newPerson.Id
                 };
 
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                //var logEntry = new CreateLogEntry
-                //{
-                //    LogType = "Failure",
-                //    Message = $"New Person,{newPerson}, could not be added"
+                var logging = new Logging()
+                {
+                    LogType = "Failure",
+                    Message = $"New Person,{newPerson}, could not be added.",
+                    LogException = ex.ToString(),
+                    TimeStamp = DateTime.Now,
+                };
+                _context.Logs.Add(logging);
+                _context.SaveChangesAsync();
 
-                //};
-                //var logHandler = new CreateLogEntry();
-                //var result = logHandler;
                 throw new BadHttpRequestException("Bad Request"); 
 
             }

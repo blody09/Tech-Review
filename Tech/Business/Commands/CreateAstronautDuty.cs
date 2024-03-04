@@ -6,11 +6,13 @@ using StargateAPI.Business.Data;
 using StargateAPI.Controllers;
 using System.Net;
 using System.Linq;
-using StargateAPI.Business.Queries; // do i want to switch to linq quieries for better security --if time permits?
+using StargateAPI.Business.Queries;
+using System.Diagnostics.CodeAnalysis; // do i want to switch to linq quieries for better security --if time permits?
 
 
 namespace StargateAPI.Business.Commands
-{ 
+{
+    [ExcludeFromCodeCoverage]
     public class CreateAstronautDuty : IRequest<CreateAstronautDutyResult>
     {
         public required string Name { get; set; }
@@ -41,7 +43,7 @@ namespace StargateAPI.Business.Commands
                 var logging = new Logging()
                 {
                     LogType = "BadRequest",
-                    Message = $"Person, {person}, Already exists.",
+                    Message = $"Person, {person.Name}, doesnt exist or does not have a astronaut service record .",
                     LogException = string.Empty,
                     TimeStamp = DateTime.Now,
                 };
@@ -57,10 +59,10 @@ namespace StargateAPI.Business.Commands
 
             if (verifyNoPreviousDuty != null)
             {
-                var logging = new Logging()  ///real world with time permitting this would be CreatLogEntry and have a converter for line 68 so that it could be async
+                var logging = new Logging()  ///real world with time permitting this would be CreatLogEntry and have a converter for line 68 & 69  so that it could be async
                 {
                     LogType = "Failure",
-                    Message = $"Astronaut,{request.Name}, already has assigned duties,{request.DutyTitle}, assigned on {request.DutyStartDate}.",
+                    Message = $"Astronaut,{person.Name}, already has assigned duties,{request.DutyTitle}, assigned on {request.DutyStartDate}.",
                     LogException = string.Empty,
                     TimeStamp = DateTime.Now,
                 };
@@ -94,6 +96,26 @@ namespace StargateAPI.Business.Commands
                 query = $"SELECT * FROM [AstronautDetail] WHERE {person.Id} = PersonId";
 
                 var astronautDetail = await _context.Connection.QueryFirstOrDefaultAsync<AstronautDetail>(query);
+                
+                //adding to see if person has records that already exists 
+
+                var query2 = $"SELECT * FROM [AstronautDetail] WHERE {person.Id} = {person.Name}";
+                
+                if (astronautDetail != null)
+                {
+                    var logging1 = new Logging()
+                    {
+                        LogType = "Bad Request",
+                        Message = $"Person, {person.Name}, already has Astronaut Records",
+                        LogException = String.Empty,
+                        TimeStamp = DateTime.Now,
+                    };
+                    _context.Logs.Add(logging1);
+                    _context.SaveChangesAsync();
+
+                    throw new BadHttpRequestException("Bad Request");
+
+                }
 
                 if (astronautDetail == null)
                 {
@@ -144,10 +166,10 @@ namespace StargateAPI.Business.Commands
                 
                 await _context.SaveChangesAsync();
 
-                var logging = new Logging()  ///real world with time permitting this would be CreatLogEntry and have a converter for line 68 so that it could be async
+                var logging = new Logging()  
                 {
                     LogType = "Successs",
-                    Message = $"Astronaut duty created for ,{request.Name}, Duty Title: ,{request.DutyTitle}, Starting on: ,{request.DutyStartDate}. ",
+                    Message = $"Astronaut duty created for ,{person.Name}, Duty Title: ,{request.DutyTitle}, Starting on: ,{request.DutyStartDate}. ",
                     LogException = string.Empty,
                     TimeStamp = DateTime.Now,
                 };
@@ -160,16 +182,18 @@ namespace StargateAPI.Business.Commands
                     Id = newAstronautDuty.Id
                 };
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                //var logEntry = new CreateLogEntry
-                //{
-                //    LogType = "Failure",
-                //    Message = $"A Error occured while creating astronaut duty for ,{request.Name}."
+                var logging = new Logging()  
+                {
+                    LogType = "Bad Request",
+                    Message = $"Astronaut,{request.Name}, already has assigned duties,{request.DutyTitle}, assigned on {request.DutyStartDate}.",
+                    LogException = ex.ToString(),
+                    TimeStamp = DateTime.Now,
+                };
+                _context.Logs.Add(logging);
+                _context.SaveChangesAsync();
 
-                //};
-                //var logHandler = new CreateLogEntry();
-                //var result = logHandler;
                 throw new BadHttpRequestException("Bad Request");
             }
             

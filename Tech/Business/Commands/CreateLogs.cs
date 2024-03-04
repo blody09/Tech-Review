@@ -5,12 +5,13 @@ using SQLitePCL;
 using StargateAPI.Business.Data;
 using StargateAPI.Controllers;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 
 namespace StargateAPI.Business.Commands
 {
-
+    [ExcludeFromCodeCoverage]
     public class CreateLogEntry : IRequest<CreateLogEntryResult>
     {
         public int Id { get; set; }
@@ -59,7 +60,6 @@ namespace StargateAPI.Business.Commands
 
     }
 
-    
     public class CreateLogEntryResult : BaseResponse
     {
         public int Id { get; set; }

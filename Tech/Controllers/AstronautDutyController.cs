@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Asn1.Ocsp;
 using StargateAPI.Business.Commands;
+using StargateAPI.Business.Data;
 using StargateAPI.Business.Queries;
 using System.Net;
 
@@ -12,9 +14,11 @@ namespace StargateAPI.Controllers
     public class AstronautDutyController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public AstronautDutyController(IMediator mediator)
+        private readonly StargateContext _context;
+        public AstronautDutyController(IMediator mediator, StargateContext context)
         {
             _mediator = mediator;
+            _context = context;
         }
 
         [HttpGet("{name}")]
@@ -27,27 +31,33 @@ namespace StargateAPI.Controllers
                     Name = name
                 });
 
-                //var logEntry = new CreateLogEntry
-                //{
-                //    LogType = "Success",
-                //    Message = $"Successfully retrieved Astronaut Duties by Name"
-                //};
-                //var logHandler = new CreateLogEntry();
-                //var logResult = logHandler;
-                
+                var logging = new Logging()
+                {
+                    LogType = "Successs",
+                    Message = $"Successfully retrieved Astronaut Duties by Name ",
+                    LogException = string.Empty,
+                    TimeStamp = DateTime.Now,
+                };
+
+                _context.Logs.Add(logging);
+                await _context.SaveChangesAsync();
+
+   
                 return this.GetResponse(result);
             }
             catch (Exception ex)
             {
-                //var logEntry = new CreateLogEntry
-                //{
-                //    LogType = "Failure",
-                //    Message = $"Failed to Retrieve Astronaut Duties by Name"
+                var logging = new Logging()
+                {
+                    LogType = "Bad Request",
+                    Message = $"Failed to retrieved Astronaut Duties by Name ",
+                    LogException = string.Empty,
+                    TimeStamp = DateTime.Now,
+                };
 
-                //};
-                //var logHandler = new CreateLogEntry();
-                //var result = logHandler;
-                
+                _context.Logs.Add(logging);
+                await _context.SaveChangesAsync();
+
                 return this.GetResponse(new BaseResponse()
                 {
                     Message = ex.Message,

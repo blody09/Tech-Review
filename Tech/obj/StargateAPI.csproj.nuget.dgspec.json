@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Lock\\OneDrive\\Desktop\\Tech_Review\\tech_review\\tech_exercise\\tech_exercise\\package\\exercise1\\api\\StargateAPI.csproj": {}
+    "C:\\Users\\Lock\\OneDrive\\Desktop\\New_Tech_Review\\Tech\\StargateAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Lock\\OneDrive\\Desktop\\Tech_Review\\tech_review\\tech_exercise\\tech_exercise\\package\\exercise1\\api\\StargateAPI.csproj": {
+    "C:\\Users\\Lock\\OneDrive\\Desktop\\New_Tech_Review\\Tech\\StargateAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Lock\\OneDrive\\Desktop\\Tech_Review\\tech_review\\tech_exercise\\tech_exercise\\package\\exercise1\\api\\StargateAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Lock\\OneDrive\\Desktop\\New_Tech_Review\\Tech\\StargateAPI.csproj",
         "projectName": "StargateAPI",
-        "projectPath": "C:\\Users\\Lock\\OneDrive\\Desktop\\Tech_Review\\tech_review\\tech_exercise\\tech_exercise\\package\\exercise1\\api\\StargateAPI.csproj",
+        "projectPath": "C:\\Users\\Lock\\OneDrive\\Desktop\\New_Tech_Review\\Tech\\StargateAPI.csproj",
         "packagesPath": "C:\\Users\\Lock\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Lock\\OneDrive\\Desktop\\Tech_Review\\tech_review\\tech_exercise\\tech_exercise\\package\\exercise1\\api\\obj\\",
+        "outputPath": "C:\\Users\\Lock\\OneDrive\\Desktop\\New_Tech_Review\\Tech\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -45,6 +45,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "AutoFixture.AutoMoq": {
+              "target": "Package",
+              "version": "[4.18.1, )"
+            },
             "Dapper": {
               "target": "Package",
               "version": "[2.1.28, )"
@@ -78,6 +82,10 @@
             "NLog": {
               "target": "Package",
               "version": "[5.2.8, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[4.1.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",

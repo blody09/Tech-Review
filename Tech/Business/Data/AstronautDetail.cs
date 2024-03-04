@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StargateAPI.Business.Data
 {
     [Table("AstronautDetail")]
+    [ExcludeFromCodeCoverage]
     public class AstronautDetail
     {
         public int Id { get; set; }
@@ -22,6 +24,8 @@ namespace StargateAPI.Business.Data
         public virtual Person Person { get; set; }
     }
 
+    //TODO Is it standard to unit test these? dig into it if time permits.
+    [ExcludeFromCodeCoverage]
     public class AstronautDetailConfiguration : IEntityTypeConfiguration<AstronautDetail>
     {
         public void Configure(EntityTypeBuilder<AstronautDetail> builder)

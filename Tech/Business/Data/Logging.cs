@@ -2,11 +2,13 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StargateAPI.Business.Data
 {
     [Table("Logging")]
-    [Index(nameof(LogType))]  
+    [Index(nameof(LogType))]
+    [ExcludeFromCodeCoverage]
     public class Logging
     {
         [Key]
@@ -24,7 +26,7 @@ namespace StargateAPI.Business.Data
         public DateTime TimeStamp { get; set; }
 
     }
-
+    [ExcludeFromCodeCoverage]
     public class LoggingConfiguration : IEntityTypeConfiguration<Logging>
     {
         public void Configure(EntityTypeBuilder<Logging> builder)
